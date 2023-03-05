@@ -1,0 +1,39 @@
+QtWidgets:QWidget{
+    background-color:#DDB1B1;
+    border:none;
+    border-radius:15px;
+}
+#btn_load {
+    background-color: #DEDCDC;
+    border-radius: 10px;
+    color: #1D2529;
+}
+#btn_load:hover {
+    background-color: #D2D2D2;
+}
+#btn_load:pressed {
+    background-color: #C6C6C6;
+}
+#btn_application {
+    background-color: #DEDCDC;
+    border-radius: 10px;
+    color: #1D2529;
+}
+#btn_application:hover {
+    background-color: #D2D2D2;
+}
+#btn_application:pressed {
+    background-color: #C6C6C6;
+}
+#pushButton_ren{
+    background-color: #D98759;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+#pushButton_ren:hover {
+    background-color: #E1A37E;
+}
+
+#pushButton_ren:pressed {
+    background-color:  #D98759;
+}
