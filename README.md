@@ -51,5 +51,3 @@
 ![image](images/aXTo0b_u4JO2xv135cRrV44BojGrOCFzARlQaHyHh6s.png)
 ![image](images/YQS3uLzvUxQLkg5LMUG9BNZQbtFKhNQB4qIsYmmIkBE.png)
 
-##### 开源协议：
-本项目基于 [Apache 2.0 license](https://github.com/junasir/OpenSV/blob/main/LICENSE)
