@@ -37,6 +37,8 @@
 
 [https://github.com/junasir/OpenSV\_Plugins](https://github.com/junasir/OpenSV_Plugins)
 
+支持的插件有：**1.图像读取 2.图像灰度 3.图像二值化 4.图像显示 5.图像保存 6.图像BGR通道分离 7.图像HSV通道分离 8.图像高斯模糊 9.图像翻转 10.图像腐蚀 11.图像膨胀 12.图像HSV颜色识别 13.图像找外接矩形**
+
 【2】需要注意要将文件夹名称改成JuPlginPack
 
 ![image](images/plAXCh3ibHWdDu2g36riD1WOEQOQTTznDAWGXxmePtY.png)
@@ -44,6 +46,8 @@
 6、目前能达到什么样的效果？
 
 ![image](images/Db0B2TxyS0G22WaZ79cc7bWnZs7OdRe9Oe1oqn_cyQE.png)
+![image](images/20230306205035.png)
+![image](images/20230306205031.png)
 
 
 
