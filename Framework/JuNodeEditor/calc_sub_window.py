@@ -13,15 +13,18 @@ DEBUG_CONTEXT = True
 
 
 class CalculatorSubWindow(NodeEditorWidget):
-    def __init__(self, auto_pack=None, log=None):
+    def __init__(self, auto_pack=None, log=None, s_img=None):
         super().__init__()
         self.user_logger = log
+        self.s_img = s_img
+        self._run_all_flag = False
         self.set_log(log=self.user_logger)
         self.initUI()
         self.auto_pack = auto_pack
         # self.setAttribute(Qt.WA_DeleteOnClose)
         self.deal_ = Queue()
-        self.run_module = run_module(queue=self.deal_, device=self.auto_pack.device, log=self.user_logger)
+        self.run_module = run_module(queue=self.deal_, device=self.auto_pack.device, log=self.user_logger,
+                                     s_img=self.s_img)
         # self.setTitle()
 
         self.initNewNodeActions()
@@ -169,10 +172,10 @@ class CalculatorSubWindow(NodeEditorWidget):
         # self.mapToGlobal(QPoint(1013, 657))
         context_menu = QMenu(self)
         node_run = context_menu.addAction("Run")
-        # markDirtyDescendantsAct = context_menu.addAction("Mark Descendant Dirty")
-        # markInvalidAct = context_menu.addAction("Mark Invalid")
-        # unmarkInvalidAct = context_menu.addAction("Unmark Invalid")
-        # evalAct = context_menu.addAction("Eval")
+        if self._run_all_flag is False:
+            node_run1 = context_menu.addAction("Auto Run Node")
+        else:
+            node_run2 = context_menu.addAction("Stop Run Node")
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
 
         selected = None
@@ -184,11 +187,21 @@ class CalculatorSubWindow(NodeEditorWidget):
             selected = item.node
         if hasattr(item, 'socket'):
             selected = item.socket.node
-
-        # if DEBUG_CONTEXT: print("got item:", selected)
         if selected and action == node_run:
-            deal_dic = {"_class": selected, "default_parm": selected.grNode.default_parm}
+            deal_dic = {"_class": selected, "default_parm": selected.grNode.default_parm, "mode": 1}
             self.deal_.put(deal_dic)
+        if self._run_all_flag is False:
+            if selected and action == node_run1:
+                self._run_all_flag = True
+                deal_dic = {"_class": selected, "default_parm": selected.grNode.default_parm,
+                            "mode": 2, "flag": "start"}
+                self.deal_.put(deal_dic)
+        else:
+            if selected and action == node_run2:
+                self._run_all_flag = True
+                deal_dic = {"_class": selected, "default_parm": selected.grNode.default_parm,
+                            "mode": 2, "flag": "stop"}
+                self.deal_.put(deal_dic)
 
     def handleEdgeContextMenu(self, event):
         if DEBUG_CONTEXT: print("CONTEXT: EDGE")

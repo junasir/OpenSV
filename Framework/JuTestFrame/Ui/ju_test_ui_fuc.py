@@ -26,7 +26,8 @@ from JuControl.ju_about_ui import JuAboutDialog
 from qtpyeditor import PMGPythonEditor
 from ju_cfg import JuConfig
 from PySide2.QtCore import QObject, QTimer, Qt, Signal, QPoint, QCoreApplication, QThread
-from PySide2.QtGui import QCursor, QTextCharFormat, QColor
+from PySide2.QtGui import QCursor, QTextCharFormat, QColor, QImage, QPixmap
+from cv2 import resize, INTER_AREA, cvtColor, COLOR_BGR2RGB
 from PySide2.QtWidgets import QAction, QTreeWidget, QMenu, QTreeWidgetItem, QMessageBox, QTabWidget, QWidget, \
     QVBoxLayout, QFileDialog, QApplication
 from subprocess import Popen, STDOUT, PIPE
@@ -70,6 +71,7 @@ class Test_Ui_Thread(QThread):
 class Ju_Test_Ui_Fuc(QWidget):
     update_msg = Signal(int)
     s_test_log = Signal(str)
+    s_img = Signal(list)
 
     def __init__(self, parent=None, deal_receive=None, deal_send=None, person_type=None, new_ui_test=None):
         super(Ju_Test_Ui_Fuc, self).__init__()
@@ -84,7 +86,7 @@ class Ju_Test_Ui_Fuc(QWidget):
         self.parent = parent
         self._user_logger = JuLogger("user_log")
         self._test_logger = JuLogger("test_log")
-        self.CalculatorWindow = CalculatorWindow(log=self._user_logger)
+        self.CalculatorWindow = CalculatorWindow(log=self._user_logger, s_img=self.s_img)
         # self.CalculatorWindow.set_log(self._user_logger)
         self.deal_receive = deal_receive
         self.deal_send = deal_send
@@ -102,6 +104,7 @@ class Ju_Test_Ui_Fuc(QWidget):
         # self.setStyleSheet(JuFileRead.read_file(u"./JuResource/2.qss"))
         self.drag_list()
         self._tree_device()
+        self._flag_first = True
         # self.deal_send.put({"func": "upload_login_record", "args": (self.person_type, )})
         #
         # ju_socket_manage = Ju_Run_Manage(receive=self.deal_receive)
@@ -199,6 +202,23 @@ class Ju_Test_Ui_Fuc(QWidget):
         self._ui_base.btn_disconnect_device.clicked.connect(self.btn_disconnect_device)
         self._ui_base.tb.actionTriggered[QAction].connect(self.toolbtnpressed)
         self._ui_base.tab_bottom.btn2.hide()
+        self.s_img.connect(self.img_show)
+
+    def img_show(self, lis):
+        try:
+            if self._flag_first:
+                self.size_1 = (200, 200)
+                self._flag_first = False
+            if len(lis) > 0:
+                image = deepcopy(lis[0])
+                shrink = resize(image, self.size_1, interpolation=INTER_AREA)
+                image = cvtColor(shrink, COLOR_BGR2RGB)
+                # image = resize(image, (self._ui_base.label_img_bottom.width(), self._ui_base.label_img_bottom.height()))
+                showImage2 = QImage(image.data, self.size_1[0],
+                                    self.size_1[1], QImage.Format_RGB888)
+                self._ui_base.label_img_bottom.setPixmap(QPixmap.fromImage(showImage2))
+        except Exception as e:
+            self._user_logger.error(e)
 
     def btn_connect_device(self):
         # self.CalculatorWindow.Auto_Pack.auto_get_device_class_new()

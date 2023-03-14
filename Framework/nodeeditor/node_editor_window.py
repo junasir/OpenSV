@@ -17,7 +17,7 @@ class NodeEditorWindow(QWidget):
     NodeEditorWidget_class = NodeEditorWidget
 
     """Class representing NodeEditor's Main Window"""
-    def __init__(self, log=None):
+    def __init__(self, log=None, s_img=None):
         """
         :Instance Attributes:
 
@@ -26,6 +26,7 @@ class NodeEditorWindow(QWidget):
         """
         super().__init__()
         self.user_logger = log
+        self.s_img = s_img
         self.name_company = 'Blenderfreak'
         self.name_product = 'NodeEditor'
 

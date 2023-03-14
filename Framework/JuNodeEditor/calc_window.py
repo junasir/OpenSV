@@ -1,17 +1,16 @@
 import os
 
-from PySide2.QtWidgets import QGridLayout, QVBoxLayout
-from PySide2.QtGui import QIcon, QKeySequence
-from PySide2.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
+from PySide2.QtWidgets import QGridLayout
+from PySide2.QtGui import QIcon
+# from PySide2.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 
 from nodeeditor.utils import loadStylesheets
 from nodeeditor.node_editor_window import NodeEditorWindow
 from JuNodeEditor.calc_sub_window import CalculatorSubWindow
 from JuControl.ju_ui_drag import QDMDragListbox
-from nodeeditor.utils import dumpException, pp
+from nodeeditor.utils import dumpException
 from JuRunModule.ju_auto_package import Auto_Pack
 
-# Enabling edge validators
 from nodeeditor.node_edge import Edge
 from nodeeditor.node_edge_validators import (
     edge_validator_debug,
@@ -109,7 +108,8 @@ class CalculatorWindow(NodeEditorWindow):
 
     def createMdiChild(self, child_widget=None, file=None, flag=1):
         nodeeditor = child_widget if child_widget is not None else CalculatorSubWindow(auto_pack=self.Auto_Pack,
-                                                                                       log=self.user_logger)
+                                                                                       log=self.user_logger,
+                                                                                       s_img=self.s_img)
         subwnd = nodeeditor
         # subwnd.setWindowIcon(self.empty_icon)
         nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
@@ -141,7 +141,7 @@ class CalculatorWindow(NodeEditorWindow):
         return mdiArea
 
     def file_load(self, file):
-        nodeeditor = CalculatorSubWindow(auto_pack=self.Auto_Pack, log=self.user_logger)
+        nodeeditor = CalculatorSubWindow(auto_pack=self.Auto_Pack, log=self.user_logger, s_img=self.s_img)
         nodeeditor.fileLoad(file)
         mdiArea = self.createMdiChild(child_widget=nodeeditor, file=file, flag=2)
         # mdiArea = self.getCurrentNodeEditorWidget(mdiArea=mdiArea)

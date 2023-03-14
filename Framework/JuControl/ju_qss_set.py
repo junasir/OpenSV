@@ -192,4 +192,7 @@ class Ju_Qss_Set(QObject):
             "QListWidget::item {margin-bottom: 3px;}"
             "QWidget{color:#f0f0f0;font-family:Arial;font:16px;background-color:#505050;}"
         )
+        self.parent.img_show_widget.setStyleSheet(
+            "QWidget{color:#ffffff;font-family:Arial;font:16px;background-color:#3C3F41;}"
+        )
 
