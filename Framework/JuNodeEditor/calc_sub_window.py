@@ -22,7 +22,7 @@ class CalculatorSubWindow(NodeEditorWidget):
         self.initUI()
         self.auto_pack = auto_pack
         # self.setAttribute(Qt.WA_DeleteOnClose)
-        self.deal_ = Queue()
+        self.deal_ = Queue(maxsize=25)
         self.run_module = run_module(queue=self.deal_, device=self.auto_pack.device, log=self.user_logger,
                                      s_img=self.s_img)
         # self.setTitle()
@@ -198,7 +198,7 @@ class CalculatorSubWindow(NodeEditorWidget):
                 self.deal_.put(deal_dic)
         else:
             if selected and action == node_run2:
-                self._run_all_flag = True
+                self._run_all_flag = False
                 deal_dic = {"_class": selected, "default_parm": selected.grNode.default_parm,
                             "mode": 2, "flag": "stop"}
                 self.deal_.put(deal_dic)
