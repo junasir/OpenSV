@@ -12,12 +12,17 @@ class QDMDragListbox(QWidget):
         self._Layout = QVBoxLayout(self)
         self._Layout.setContentsMargins(0, 0, 0, 0)
         self._Layout.setSpacing(0)
+        self.widget = QWidget(self)
+        self.one_verticalLayout = QVBoxLayout(self.widget)
+        self.one_verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.one_verticalLayout.setSpacing(0)
         self.auto_pack = auto_pack
         self.initUI()
-        ve_spac = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self._Layout.addItem(ve_spac)
-
-
+        self._Layout.addWidget(self.widget)
+        # ve_spac = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        # # ve_spac.isEmpty()
+        # self._Layout.addItem(ve_spac)
+        # self._Layout.removeItem(ve_spac)
 
     def initUI(self):
         # init
@@ -69,13 +74,14 @@ class QDMDragListbox(QWidget):
         one_list.setDragEnabled(True)
         one_list.isVisible()
         one_list.setVisible(True)
+        # one_list.setFixedHeight(32 * len(value))
         one_verticalLayout.addWidget(one_list)
         self.listwidget_all[key] = one_list
         pushbtn.clicked.connect(lambda: self.push_button_click(one_list))
         for item_key, item_value in value.items():
             node = item_value
             self.addMyItem(node.op_title, node.icon, node.op_code, one_list=one_list)
-        self._Layout.addWidget(one_widget)
+        self.one_verticalLayout.addWidget(one_widget)
 
     def push_button_click(self, list):
         if list.isVisible():

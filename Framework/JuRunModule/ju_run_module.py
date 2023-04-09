@@ -110,6 +110,12 @@ class run_module(QObject):
                                         else:
                                             value.append(input_value[i])
                                     # value.append(_class.content)
+                                    # if _class.op_code == "CalcNode_Socket_Com":
+                                    #     if default_parm["socket_class"] is not None:
+                                    #         value.append(default_parm["socket_class"])
+                                    #     else:
+                                    #         self.user_logger.error("not get socket class")
+                                    #         return
                                     result = getattr(func, default_parm.get("operation_func"))(*value)
                                     if result[0]:
                                         output_result_key_list = default_parm["variable_output"]
@@ -148,9 +154,10 @@ class run_module(QObject):
                         elif msg["mode"] == 3:
                             func = msg["func"]
                             func.cap.release()
+                            func.cap = None
                 except BaseException as e:
                     self.user_logger.error(e)
-            sleep(0.0001)
+            sleep(0.001)
 
     def get_all_node(self, node_class, lis_all):
 
@@ -201,7 +208,7 @@ class run_module(QObject):
         self.while_run_list = []
         while 1:
             try:
-                a = time()
+                # a = time()
                 if self._stop_flag:
                     self._stop_flag = False
                     if self.while_run_list[0]["_class"].grNode.default_parm["value"][1] == "video":
@@ -211,11 +218,11 @@ class run_module(QObject):
                     break
                 try:
                     if len(self.while_run_list) > 0:
-                        for i in self.while_run_list:
+                        for i in range(len(self.while_run_list)):
                             if self._stop_flag:
                                 break
                             # c = time()
-                            self.queue.put(i)
+                            self.queue.put(self.while_run_list[i])
                             # d = time()
                             # print("---------", d - c)
                     else:
@@ -225,18 +232,27 @@ class run_module(QObject):
                         self._start_node(node)
                         for i in range(len(self.run_list)):
                             temp = self.run_list[i]["_class"]
-                            if temp.op_code == "CalcNode_Input":
-                                if temp.grNode.default_parm["value"][1] == "video":
-                                    for j in range(i, len(self.run_list)):
-                                        self.while_run_list.append(self.run_list[j])
-                                    break
+                            # if temp.op_code == "CalcNode_Input":
+                            #     if temp.grNode.default_parm["value"][1] == "video":
+                            #         for j in range(i, len(self.run_list)):
+                            #             self.while_run_list.append(self.run_list[j])
+                            #         break
+                            if temp.op_code == "CalcNode_While":
+                                for j in range(i, len(self.run_list)):
+                                    self.while_run_list.append(self.run_list[j])
+                                break
+                            # elif temp.op_code == "CalcNode_Socket_Com":
+                            #     for j in range(i, len(self.run_list)):
+                            #         self.while_run_list.append(self.run_list[j])
+                            #     break
                 except BaseException as e:
                     self.user_logger.error(e)
-                b = time()
-                print("==================", b - a)
+                # b = time()
+                # print("==================", b - a)
                 sleep(0.001)
             except BaseException as e:
                 self.user_logger.error(e)
+                break
 
     def _start_node(self, node):
         if self._stop_flag:

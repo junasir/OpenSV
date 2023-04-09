@@ -23,6 +23,7 @@ from JuControl.notification import notification
 # from JuFileOperate.ju_file_reader import JuFileRead
 # from JuQueue.ju_queue_manage import Ju_Process_Manage
 from JuControl.ju_about_ui import JuAboutDialog
+from JuScoket.ju_scoket_server import Ju_Socket_Manage_Server
 from qtpyeditor import PMGPythonEditor
 from ju_cfg import JuConfig
 from PySide2.QtCore import QObject, QTimer, Qt, Signal, QPoint, QCoreApplication, QThread
@@ -130,15 +131,15 @@ class Ju_Test_Ui_Fuc(QWidget):
 
     def _init_ui(self):
         self._bind_event()
-        if self.person_type == "teacher":
-            self.socket_receive = Queue()
-            self.socket_send = Queue()
-            # ju_socket_manage = Ju_Socket_Manage_Server(receive=self.socket_receive, send=self.socket_send)
-            # ju_socket_manage.daemon = True
-            # ju_socket_manage.start()
-            q_receive = Thread(target=self.queue_receive, args=())
-            q_receive.start()
-            self._right_bottom_info.info_show(text="欢迎回来，感谢使用", timeout=20)
+        # if self.person_type == "teacher":
+        self.socket_receive = Queue()
+        self.socket_send = Queue()
+        ju_socket_manage = Ju_Socket_Manage_Server(receive=self.socket_receive, send=self.socket_send)
+        ju_socket_manage.daemon = True
+        ju_socket_manage.start()
+        q_receive = Thread(target=self.queue_receive, args=())
+        q_receive.start()
+        self._right_bottom_info.info_show(text="欢迎回来，感谢使用", timeout=5)
         self.text_all = {}
         self.recent_get_project()
         self._save_flag = True
